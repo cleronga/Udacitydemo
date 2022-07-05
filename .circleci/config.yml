@@ -6,20 +6,32 @@ orbs:
   welcome: circleci/welcome-orb@0.4.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-jobs:
-  Test_my_env:
+jobs:  
+  print_hello:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
-          name: "the Env value that i used"
-          command: echo $MY_ENV_VAR
+          name: "Hello"
+          command: echo "hello"
+
+  print_world:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: "world"
+          command: echo "world"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   welcome:
-    jobs:     
-      - Test_my_env
-         
+    jobs:  
+      - welcome/run   
+      - print_hello
+      - print_world:
+          requires:
+            - print_hello
